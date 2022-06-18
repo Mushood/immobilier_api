@@ -17,6 +17,15 @@ class ExpressPropertyScrapper implements ScrapperInterface
         return '/buy-mauritius/all';
     }
 
+    public function getPagination()
+    {
+        return [
+            'page'  => 1,
+            'limit' => 15,
+            'total' => 0
+        ];
+    }
+
     public function getTotal()
     {
         $total      = 0;
@@ -33,20 +42,24 @@ class ExpressPropertyScrapper implements ScrapperInterface
         return $total;
     }
 
-    public function getBuyLinkFromList()
+    public function getBuyLinkFromList($page)
     {
         $links      = [];
-        $url        = $this->getBaseUrl() . $this->getBuySection();
+        $url        = $this->getBaseUrl() . $this->getBuySection() . '/?p=' . $page;
         $crawler    = Goutte::request('GET', $url);
         $selector   = '#content > div.section-results > div.card-result-gallery';
 
         $crawler->filter($selector)->each(function ($node) use (&$links) {
             $title  = $node->filter('div > div.column-text.col-md-8 > div > div > div > div.column-left.col-xsm-7 > div.card-top > div > h2')->text();
             $link   = $node->filter('div > div.column-text.col-md-8 > div > div > div > div.column-left.col-xsm-7 > div.card-top > div > h2 > a')->link()->getUri();
-            $links[] = Property::create([
-                'title' => $title,
-                'link'  => $link
-            ]);
+
+            $exists = Property::where('link', $link)->exists();
+            if (!$exists) {
+                $links[] = Property::create([
+                    'title' => $title,
+                    'link'  => $link
+                ]);
+            }
         });
 
         return $links;
@@ -108,7 +121,7 @@ class ExpressPropertyScrapper implements ScrapperInterface
             } catch (\Exception $e) {
 
             }
-            
+
             $property->update([
                 'location'              => trim($location),
                 'region'                => trim($region),
@@ -118,6 +131,8 @@ class ExpressPropertyScrapper implements ScrapperInterface
                 'surface_area_interior' => intval($interiorSurface),
                 'surface_area'          => $landSurface !== null ? intval($landSurface) : intval($interiorSurface),
                 'bedrooms'              => intval($bedrooms),
+                'done'                  => true,
+                'batch'                 => null
             ]);
         });
 

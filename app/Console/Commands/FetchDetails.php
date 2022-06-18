@@ -4,17 +4,16 @@ namespace App\Console\Commands;
 
 use App\Models\Property;
 use Illuminate\Console\Command;
-use App\Services\ExpressPropertyScrapper;
-use Illuminate\Support\Facades\DB;
+use App\Jobs\fetchExpressDetails;
 
-class TestCommand extends Command
+class FetchDetails extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'test:me';
+    protected $signature = 'fetch:details';
 
     /**
      * The console command description.
@@ -30,7 +29,13 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $total = DB::table('properties')->count();
-        dd($total);
+        $properties = Property::where('done', false)->limit(1000)->get('id');
+
+        foreach ($properties as $key => $property) {
+            dispatch(new fetchExpressDetails($property->id));
+            if ($key > 1000) {
+                break;
+            }
+        }
     }
 }

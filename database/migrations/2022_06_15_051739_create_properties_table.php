@@ -15,8 +15,10 @@ return new class extends Migration
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
+            $table->integer('batch')->nullable(true);
             $table->string('title');
             $table->string('link');
+            $table->string('category')->nullable(true);
             $table->string('location')->nullable(true);
             $table->string('region')->nullable(true);
             $table->string('type')->nullable(true);
