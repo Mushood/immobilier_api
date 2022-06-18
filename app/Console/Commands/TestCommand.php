@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Property;
 use Illuminate\Console\Command;
 use App\Services\ExpressPropertyScrapper;
 
@@ -28,7 +29,15 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $scrapper = new ExpressPropertyScrapper();
-        dd($scrapper->getLinkFromList());
+        $properties = Property::all();
+        foreach ($properties as $property) {
+            $scrapper = new ExpressPropertyScrapper();
+            $scrapper->getPropertyDetails($property);
+            dump($property->toArray());
+        }
+
+
+        //dd($scrapper->getBuyLinkFromList());
+
     }
 }
