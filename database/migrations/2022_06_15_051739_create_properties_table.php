@@ -17,6 +17,17 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('link');
+            $table->string('location');
+            $table->string('region');
+            $table->string('type');
+            $table->string('purchasing_type');
+            $table->decimal('price');
+            $table->decimal('surface_area');
+            $table->decimal('surface_area_land');
+            $table->decimal('surface_area_interior');
+            $table->integer('bedrooms');
+            $table->integer('bathrooms');
+            $table->integer('toilets');
             $table->boolean('done')->default(false);
             $table->timestamps();
         });
