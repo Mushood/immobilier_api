@@ -30,7 +30,8 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $total = DB::table('properties')->count();
+        dump(Property::count());
+        $total = DB::table('jobs')->count();
         dd($total);
     }
 }

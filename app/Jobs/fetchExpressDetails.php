@@ -15,21 +15,18 @@ class fetchExpressDetails implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $id;
+    protected $batch;
 
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct($id)
+    public function __construct($batch)
     {
-        $this->id = $id;
+        $this->batch = $batch;
     }
 
     public function handle(ExpressPropertyScrapper $scrapper)
     {
-        $property = Property::find($this->id);
-        $scrapper->getPropertyDetails($property);
+        $properties = Property::where('done', false)->where('batch', $this->batch)->get();
+        foreach ($properties as $property) {
+            $scrapper->getPropertyDetails($property);
+        }
     }
 }

@@ -14,7 +14,7 @@ class ExpressPropertyScrapper implements ScrapperInterface
 
     public function getBuySection()
     {
-        return '/buy-mauritius/all';
+        return '/buy-mauritius/all/?sort=price';
     }
 
     public function getPagination()
@@ -45,7 +45,7 @@ class ExpressPropertyScrapper implements ScrapperInterface
     public function getBuyLinkFromList($page)
     {
         $links      = [];
-        $url        = $this->getBaseUrl() . $this->getBuySection() . '/?p=' . $page;
+        $url        = $this->getBaseUrl() . $this->getBuySection() . '&p=' . $page;
         $crawler    = Goutte::request('GET', $url);
         $selector   = '#content > div.section-results > div.card-result-gallery';
 
@@ -53,11 +53,13 @@ class ExpressPropertyScrapper implements ScrapperInterface
             $title  = $node->filter('div > div.column-text.col-md-8 > div > div > div > div.column-left.col-xsm-7 > div.card-top > div > h2')->text();
             $link   = $node->filter('div > div.column-text.col-md-8 > div > div > div > div.column-left.col-xsm-7 > div.card-top > div > h2 > a')->link()->getUri();
 
+            $explodedTitle = explode('-', $title);
             $exists = Property::where('link', $link)->exists();
             if (!$exists) {
                 $links[] = Property::create([
                     'title' => $title,
-                    'link'  => $link
+                    'link'  => $link,
+                    'type'  => trim($explodedTitle[0])
                 ]);
             }
         });

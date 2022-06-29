@@ -8,6 +8,8 @@ use App\Jobs\fetchExpressDetails;
 
 class FetchDetails extends Command
 {
+    const AMOUNT = 10;
+
     /**
      * The name and signature of the console command.
      *
@@ -29,13 +31,13 @@ class FetchDetails extends Command
      */
     public function handle()
     {
-        $properties = Property::where('done', false)->limit(1000)->get('id');
+        $total = Property::where('done', false)->count();
 
-        foreach ($properties as $key => $property) {
-            dispatch(new fetchExpressDetails($property->id));
-            if ($key > 1000) {
-                break;
-            }
+        for ($i = 0; $i < ceil($total / self::AMOUNT); $i++) {
+            Property::where('done', false)->offset($i * self::AMOUNT)->limit(self::AMOUNT)->update([
+                'batch' => $i
+            ]);
+            dispatch(new fetchExpressDetails($i));
         }
     }
 }
