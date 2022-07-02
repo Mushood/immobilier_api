@@ -16,7 +16,7 @@ class IndexingProperty extends Command
 
     public function handle(ExpressPropertyScrapper $scrapper)
     {
-        $count = Property::where('done', true)->orderBy('id', 'ASC')->get();
+        $count = Property::where('done', true)->orderBy('id', 'ASC')->count();
 
         for ($i = 0; $i < ceil($count/self::AMOUNT);$i++) {
             Property::where('done', true)->skip($i * self::AMOUNT)->limit(self::AMOUNT)->update([
