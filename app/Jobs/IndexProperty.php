@@ -2,15 +2,15 @@
 
 namespace App\Jobs;
 
-use App\Console\Commands\MappingProperty;
+use Elasticsearch;
 use App\Models\Property;
-use App\Services\ExpressPropertyScrapper;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use App\Console\Commands\MappingProperty;
+use App\Services\ExpressPropertyScrapper;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
 class IndexProperty implements ShouldQueue
 {
