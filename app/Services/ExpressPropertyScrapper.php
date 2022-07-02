@@ -76,8 +76,10 @@ class ExpressPropertyScrapper implements ScrapperInterface
             $location           = null;
             $region             = null;
             $purchasingType     = null;
-            $landSurface        = null;
-            $interiorSurface    = null;
+            $landSurface        = 0;
+            $interiorSurface    = 0;
+            $price              = 0;
+            $bedrooms           = 0;
 
             try {
                 $address    = $node->filter('div > div > div.card-description > div > div.col-md-7.col-lg-7 > address')->text();
@@ -136,6 +138,7 @@ class ExpressPropertyScrapper implements ScrapperInterface
                 'done'                  => true,
                 'batch'                 => null
             ]);
+
         });
 
     }
