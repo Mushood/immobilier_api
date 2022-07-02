@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\fetchExpressLinks;
-use App\Jobs\IndexProperty;
+use Elasticsearch;
 use App\Models\Property;
-use App\Services\ExpressPropertyScrapper;
+use App\Jobs\IndexProperty;
 use Illuminate\Console\Command;
+use App\Services\ExpressPropertyScrapper;
 
 class IndexingProperty extends Command
 {
