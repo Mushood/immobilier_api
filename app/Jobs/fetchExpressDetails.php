@@ -28,5 +28,8 @@ class fetchExpressDetails implements ShouldQueue
         foreach ($properties as $property) {
             $scrapper->getPropertyDetails($property);
         }
+        Property::where('done', false)->where('batch', $this->batch)->update([
+            'batch' => null
+        ]);
     }
 }

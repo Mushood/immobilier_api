@@ -61,5 +61,9 @@ class IndexProperty implements ShouldQueue
         if ($return['errors']) {
             throw new \Exception(json_encode($return['items']));
         }
+
+        Property::where('done', false)->where('batch', $this->batch)->update([
+            'batch' => null
+        ]);
     }
 }
