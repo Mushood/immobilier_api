@@ -11,7 +11,7 @@ use Illuminate\Console\Command;
 class IndexingProperty extends Command
 {
     const AMOUNT = 100;
-    protected $signature    = 'mapping:property';
+    protected $signature    = 'indexing:property';
     protected $description  = 'Command description';
 
     public function handle(ExpressPropertyScrapper $scrapper)
